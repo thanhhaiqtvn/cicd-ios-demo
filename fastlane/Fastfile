@@ -29,6 +29,7 @@ platform :ios do
     desc "Submit a new build for Apple TestFlight with current version and builder number (Debug)"
     lane :dev do |options|
         clear_derived_data
+        xcclean(scheme: ENV["SCHEME_DEV"])
         setup_certificates
         build_debug
     end
@@ -36,6 +37,7 @@ platform :ios do
     desc "Submit a new build for Apple TestFlight with current version and builder number (Production)"
     lane :prod do |options|
         clear_derived_data
+        xcclean(scheme: ENV["SCHEME_DEV"])
         setup_certificates
         build_release
     end
@@ -44,6 +46,7 @@ platform :ios do
     desc "Submit a new build to AppCenter with current version and builder number (Debug)"
     lane :dev_appCenter do |options|
         clear_derived_data
+        xcclean(scheme: ENV["SCHEME_DEV"])
         setup_certificates
         appCenter(scheme: ENV["SCHEME_DEV"], export_method: ENV["EXPORT_METHOD"], groups: ENV["APP_CENTER_DEV_GROUPS"])
     end
@@ -51,6 +54,7 @@ platform :ios do
     desc "Submit a new build to AppCenter with current version and builder number (Production)"
     lane :prod_appCenter do |options|
         clear_derived_data
+        xcclean(scheme: ENV["SCHEME_DEV"])
         setup_certificates
         appCenter(scheme: ENV["SCHEME_RELEASE"], export_method: ENV["EXPORT_METHOD"], groups: ENV["APP_CENTER_DISTRIBUTION_GROUPS"])
     end
