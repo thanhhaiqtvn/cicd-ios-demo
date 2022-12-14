@@ -6,7 +6,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -25,7 +24,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bot-qz-PMl">
-                                <rect key="frame" x="136.66666666666666" y="411" width="119.99999999999997" height="30"/>
+                                <rect key="frame" x="100" y="411" width="193" height="30"/>
                                 <color key="backgroundColor" red="0.26274509800000001" green="0.57254901960000004" blue="0.94509803920000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="Test Crash report">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -36,8 +35,9 @@
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Bot-qz-PMl" secondAttribute="trailing" constant="100" id="9SZ-4H-rZv"/>
                             <constraint firstItem="hmc-cG-pXc" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="XPn-7B-Nar"/>
                             <constraint firstItem="hmc-cG-pXc" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="100" id="fDk-dU-b5c"/>
                             <constraint firstItem="Bot-qz-PMl" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="oz2-16-yoq"/>
@@ -54,8 +54,5 @@
         <namedColor name="AccentColor">
             <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>

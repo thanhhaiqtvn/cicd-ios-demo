@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-DEV_CERTIFICATE_PATH=./fastlane/certificates/Certificates_dev.p12
+DEV_CERTIFICATE_PATH=./fastlane/certificates/certificates_dev.p12
 
 mkdir -p ./fastlane/certificates
 

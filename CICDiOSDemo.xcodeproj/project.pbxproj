@@ -101,7 +101,6 @@
 				AC95D0500545EF491815AD35 /* Pods-CICDiOSDemoTests.debug.xcconfig */,
 				E6805F2C3255745AB1EAD071 /* Pods-CICDiOSDemoTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -242,10 +241,12 @@
 					};
 					05DB3C912938643900D240D5 = {
 						CreatedOnToolsVersion = 13.4.1;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 05DB3C7B2938643800D240D5;
 					};
 					05DB3C9B2938643900D240D5 = {
 						CreatedOnToolsVersion = 13.4.1;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 05DB3C7B2938643800D240D5;
 					};
 				};
