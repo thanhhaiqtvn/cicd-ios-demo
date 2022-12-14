@@ -1,0 +1,149 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+	
+    desc 'Builds project and executes unit tests'
+    lane :tests do
+        run_tests(
+            workspace: ENV["WORKSPACE"],
+            scheme: ENV["SCHEME_DEV"]
+        )
+    end
+    
+    # Apple TestFight upload binaries
+    desc "Submit a new build for Apple TestFlight with current version and builder number (Debug)"
+    lane :dev do |options|
+        clear_derived_data
+        setup_certificates
+        build_debug
+    end
+
+    desc "Submit a new build for Apple TestFlight with current version and builder number (Production)"
+    lane :prod do |options|
+        clear_derived_data
+        setup_certificates
+        build_release
+    end
+
+    # AppCenter upload binaries
+    desc "Submit a new build to AppCenter with current version and builder number (Debug)"
+    lane :dev_appCenter do |options|
+        clear_derived_data
+        setup_certificates
+        appCenter(scheme: ENV["SCHEME_DEV"], export_method: ENV["EXPORT_METHOD"], groups: ENV["APP_CENTER_DEV_GROUPS"])
+    end
+
+    desc "Submit a new build to AppCenter with current version and builder number (Production)"
+    lane :prod_appCenter do |options|
+        clear_derived_data
+        setup_certificates
+        appCenter(scheme: ENV["SCHEME_RELEASE"], export_method: ENV["EXPORT_METHOD"], groups: ENV["APP_CENTER_DISTRIBUTION_GROUPS"])
+    end
+
+    # Sonar Analysic
+    desc "Run Sonarqude"
+    lane :sonar_run do
+        sonar(
+            project_key: ENV["APP_KEY"],
+            project_version: ENV["PROJECT_VERSION"],
+            project_name: ENV["PROJECT_NAME"],
+            sources_path: File.expand_path("../sonar_reports"),
+            sonar_organization: "thanhhaiqtvn",
+            sonar_login: ENV["SONAR_TOKEN"],
+            sonar_url: "https://sonarcloud.io"
+        )
+    end
+
+    ###############################################
+    ################# private_lane ################
+    ###############################################
+    private_lane :setup_certificates do |options|
+        create_keychain(
+            name: ENV["KEYCHAIN_NAME"],
+            default_keychain: true,
+            unlock: true,
+            timeout: 3600,
+            lock_when_sleeps: true,
+            password: ENV["KEYCHAIN_PASSWORD"]
+        )
+         
+        install_provisioning_profile(path: ENV["PROVSIONING_PROFILE_REPO_PATH"])
+        # setup_ios_profiles(api_token: ENV["APP_CENTER_API_TOKEN"])
+        import_certificate(
+            keychain_name: ENV["KEYCHAIN_NAME"],
+            certificate_path: ENV["CERTIFICATE_PATH"],
+            keychain_password: ENV["KEYCHAIN_PASSWORD"],
+            certificate_password: ENV["P12_PASSWORD"]
+        )
+    end
+
+    private_lane :appCenter do |options|
+
+        # Build the app
+        build(scheme: options[:scheme])
+
+        # Upload the app
+        appcenter_upload(
+            api_token: ENV["APP_CENTER_API_TOKEN"],
+            owner_name: ENV["APP_CENTER_OWNER_NAME"],
+            app_name: ENV["APP_CENTER_APP_NAME"],
+            destinations: options[:groups],
+            release_notes: (options[:scheme].include? "Release") ? "RELEASE Build\n=============" : "DEBUG Build\n===========",
+            notify_testers: true
+        )
+    end
+
+    private_lane :build do |options|
+        gym(
+            scheme: options[:scheme],
+            workspace: ENV["WORKSPACE"],
+            export_method: ENV["EXPORT_METHOD"],
+            xcargs: "-allowProvisioningUpdates",
+            export_xcargs: "-allowProvisioningUpdates",
+            suppress_xcode_output: true,
+            clean: true
+        )
+        # testflight(app_identifier: options[:app_identifier], changelog: options[:changelog], skip_waiting_for_build_processing: true)
+    end
+
+    private_lane :build_debug do
+        build(scheme: ENV["SCHEME_DEV"])
+    end
+
+    private_lane :build_release do |options|
+        build(scheme: ENV["SCHEME_RELEASE"])
+    end
+	
+    before_all do |lane|
+        # Ensure that your git status is not dirty
+        # ensure_git_status_clean
+    end
+
+    after_all do |lane|
+        # This block is called, only if the executed lane was successful
+        copy_artifacts(
+           target_path: "artifacts",
+           artifacts: ["*.cer", "*.mobileprovision", "*.ipa", "*.dSYM.zip"],
+           keep_original: false
+        )
+    end
+
+    error do |lane, exception|
+        #reset_git_repo(force: true)
+    end
+end

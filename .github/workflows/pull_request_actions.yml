@@ -1,0 +1,33 @@
+name: Pull Request actions
+on:
+  pull_request:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: CocoaPod Install
+        run: pod install
+      
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Install gems
+        run: bundle install
+      
+      # Run the tests
+      - name: Run the tests
+        run: bundle exec fastlane ios tests
+
+      # - name: Run Fastlane - Build app
+      #   env:
+      #     IOS_DEVELOPMENT: ${{ secrets.IOS_DEVELOPMENT }}
+      #     P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+      #     KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+      #   run: bundle exec fastlane ios dev

@@ -15,7 +15,7 @@ Pods
 # Fastlane
 /fastlane/report.xml
 /fastlane/test_output
-/fastlane/certificates
+# /fastlane/certificates
 Build
 artifacts
 
