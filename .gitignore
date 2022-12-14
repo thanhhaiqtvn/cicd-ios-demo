@@ -1,0 +1,23 @@
+# Xcode
+DerivedData
+xcuserdata
+
+# Cocoa Pods
+Pods
+
+# General
+.vscode
+/artifacts
+*.dSYM.zip
+*.ipa
+*.DS_Store
+
+# Fastlane
+/fastlane/report.xml
+/fastlane/test_output
+/fastlane/certificates
+Build
+artifacts
+
+# Sonar
+.scannerwork
